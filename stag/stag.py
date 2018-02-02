@@ -29,18 +29,8 @@ import argparse
 import subprocess
 import numpy as np
 from itertools import combinations
-try:
-    import tree
-except ImportError:
-    try:
-        import ete3 as tree
-    except ImportError:
-        try:
-            import ete2 as tree
-        except ImportError:
-            print("ERROR: Could not import tree library ete3 or ete2. Please install one of these.")
-            sys.exit()
-        
+
+import tree       
 import consensus_tree as cons
         
 def CanRunCommand(command, qAllowStderr = False, qPrint = True):
