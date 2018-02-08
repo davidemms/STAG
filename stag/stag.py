@@ -234,6 +234,14 @@ def ProcessTrees(dir_in, dir_matrices, dir_trees_out, GeneToSpecies, qVerbose=Tr
 #            print(os.path.split(fn)[1] + " - Only %d species, skipping" % nThis)
             nNotAllPresent += 1
             continue
+        if nThis == len(genes):
+            # Single copy - don't need to calculate the tree
+            treeOutFN = dir_trees_out + os.path.split(fn)[1] + ".tre"
+            for n in t:
+                n.name = s_to_i[GeneToSpecies.ToSpecies(n.name)]
+            t.write(outfile = treeOutFN, format=5)
+            if qVerbose: print(os.path.split(fn)[1] + " - Processed")
+            continue
         g_to_i = {g:s_to_i[s] for g,s in zip(genes, species)}
         D = GetDistances_fast(t, nSp, g_to_i)
         species_names_fastme = map(str,xrange(nSp))
@@ -272,7 +280,7 @@ def main(args):
     os.mkdir(dir_matrices)
     dir_trees_out = dir_out + "Trees/"
     os.mkdir(dir_trees_out)
-    ProcessTrees(dir_in, dir_matrices, dir_trees_out, gene_to_species)
+    ProcessTrees(dir_in, dir_matrices, dir_trees_out, gene_to_species, qVerbose=(not args.quiet))
     outputFN = dir_out + "SpeciesTree.tre"
     InferSpeciesTree(dir_trees_out, gene_to_species.species, outputFN)
     print("STAG species tree: " + os.path.abspath(outputFN) + "\n")
@@ -320,6 +328,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("species_map", help = "Map file from gene names to species names, or SpeciesIDs.txt file from OrthoFinder")
     parser.add_argument("gene_trees", help = "Directory conaining gene trees")
+    parser.add_argument("-q", "--quiet", help = "Only print sparse output", action="store_true")
     args = parser.parse_args()
     main(args)
 #    TestTimings()
