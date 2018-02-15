@@ -1,4 +1,4 @@
-# STAG: Species Tree from All Genes
+# STAG: Species Tree inference from All Genes
 
 ![STAG logo](stag_logo.png)
 
