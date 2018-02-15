@@ -157,7 +157,7 @@ def GetDistances_fast(t, nSp, g_to_i):
     D = np.ones((nSp, nSp)) * 9e99
     for n in t.traverse('postorder'):
         if n.is_leaf():
-            n.add_feature('d', {g_to_i[n.name]:n.dist})
+            n.add_feature('d', {g_to_i[n.name]:max(0.0, n.dist)})
         else:
             children = n.get_children()
             for ch0, ch1 in combinations(children,2):
@@ -168,7 +168,7 @@ def GetDistances_fast(t, nSp, g_to_i):
                         j = sp1 if sp0<sp1 else sp0
                         D[i,j] = min(D[i,j], dist0+dist1)
                 spp = {k for ch in children for k in ch.d.keys()}
-                d = {k:(min([ch.d[k] for ch in children if k in ch.d])+n.dist) for k in spp}
+                d = {k:(min([ch.d[k] for ch in children if k in ch.d])+max(0.0, n.dist)) for k in spp}
                 n.add_feature('d', d)
     for i in xrange(nSp):
         for j in xrange(i):
