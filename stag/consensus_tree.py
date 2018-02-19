@@ -21,7 +21,6 @@
 # For any enquiries send an email to David Emms
 # david_emms@hotmail.com
 
-import sys
 import time
 import glob
 import argparse
